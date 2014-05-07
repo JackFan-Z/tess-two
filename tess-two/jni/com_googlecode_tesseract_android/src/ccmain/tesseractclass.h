@@ -966,6 +966,7 @@ class Tesseract : public Wordrec {
              "not going to be used for OCR but say only for layout analysis.");
   BOOL_VAR_H(textord_equation_detect, false, "Turn on equation detector");
   INT_VAR_H(tessedit_parallelize, 0, "Run in parallel where possible");
+  INT_VAR_H(dopasses, 0, "Recognize N Passes"); //JackTest
 
   // The following parameters were deprecated and removed from their original
   // locations. The parameters are temporarily kept here to give Tesseract
