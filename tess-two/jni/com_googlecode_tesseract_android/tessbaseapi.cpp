@@ -21,6 +21,9 @@
 #include "common.h"
 #include "baseapi.h"
 #include "allheaders.h"
+#ifdef MY_ANDROID_NDK_PROFILER_ENABLED
+#include <prof.h>
+#endif
 
 static jfieldID field_mNativeData;
 
@@ -230,8 +233,15 @@ jstring Java_com_googlecode_tesseract_android_TessBaseAPI_nativeGetUTF8Text(JNIE
 
   native_data_t *nat = get_native_data(env, thiz);
 
+#ifdef MY_ANDROID_NDK_PROFILER_ENABLED
+  monstartup("tess.so");
+#endif
+
   char *text = nat->api.GetUTF8Text();
 
+#ifdef MY_ANDROID_NDK_PROFILER_ENABLED
+  moncleanup();
+#endif
   jstring result = env->NewStringUTF(text);
 
   free(text);
