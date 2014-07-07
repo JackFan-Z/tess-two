@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8.+'
+        classpath 'com.android.tools.build:gradle:0.12.+'
     }
 }
 apply plugin: 'android-library'
@@ -14,7 +14,7 @@ dependencies {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    buildToolsVersion "19.1"
 
     sourceSets {
         main {
@@ -51,7 +51,7 @@ android {
         logger.info('Project Path: ' +projectDir)
         logger.info('JNI Path: ' +ndkBuildingDir)
 
-        def lpfile = file('../local.properties');
+        def lpfile = file('local.properties');
         if (lpfile.exists())
         {
             def Properties localProps = new Properties()
