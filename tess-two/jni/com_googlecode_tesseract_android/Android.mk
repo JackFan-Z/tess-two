@@ -4,6 +4,9 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := libtess
 
+# Android NDK Profiler
+MY_ANDROID_NDK_PROFILER_ENABLED := false
+
 # tesseract (minus executable)
 
 BLACKLIST_SRC_FILES := \
@@ -57,6 +60,17 @@ LOCAL_CFLAGS := \
   -Wno-deprecated \
   -D_GLIBCXX_PERMIT_BACKWARD_HASH   # fix for android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.6/include/ext/hash_map:61:30: fatal error: backward_warning.h: No such file or directory
 
+
+ifeq ($(MY_ANDROID_NDK_PROFILER_ENABLED),true) 
+	# Show message
+	# $(info GNU Profiler is enabled)
+	# Enable the monitor functions
+	LOCAL_CFLAGS += -DMY_ANDROID_NDK_PROFILER_ENABLED
+	LOCAL_CFLAGS += -pg 
+	# Use Android NDK Profiler static library
+	LOCAL_STATIC_LIBRARIES := android-ndk-profiler
+endif
+
 # jni
 
 LOCAL_SRC_FILES += \
@@ -78,3 +92,8 @@ LOCAL_SHARED_LIBRARIES := liblept
 LOCAL_DISABLE_FORMAT_STRING_CHECKS := true
 
 include $(BUILD_SHARED_LIBRARY)
+
+ifeq ($(MY_ANDROID_NDK_PROFILER_ENABLED),true)
+   # at the end of Android.mk
+   $(call import-module,android-ndk-profiler)
+endif

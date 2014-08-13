@@ -406,6 +406,8 @@ Tesseract::Tesseract()
                 this->params()),
     INT_MEMBER(tessedit_parallelize, 0, "Run in parallel where possible",
                 this->params()),
+    INT_MEMBER(dopasses, 0, "Recognize N Passes",
+               this->params()),  //JackTest
 
     // The following parameters were deprecated and removed from their original
     // locations. The parameters are temporarily kept here to give Tesseract

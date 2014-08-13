@@ -874,7 +874,11 @@ int TessBaseAPI::Recognize(ETEXT_DESC* monitor) {
     bool wait_for_text = true;
     GetBoolVariable("paragraph_text_based", &wait_for_text);
     if (!wait_for_text) DetectParagraphs(false);
-    if (tesseract_->recog_all_words(page_res_, monitor, NULL, NULL, 0)) {
+      
+      int dopasses=0;//JackTest
+      GetIntVariable("dopasses", &dopasses);
+      //tprintf("dopasses = %d", dopasses);
+    if (tesseract_->recog_all_words(page_res_, monitor, NULL, NULL, dopasses)) {
       if (wait_for_text) DetectParagraphs(true);
     } else {
       result = -1;
