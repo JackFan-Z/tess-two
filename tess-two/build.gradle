@@ -60,18 +60,19 @@ android {
             {
                 logger.info('Taking ndk.dir')
                 ndkBuild = new File(localProps['ndk.dir'], 'ndk-build')
-                commandLine ndkBuild, '-C', file('.').absolutePath
-                //commandLine ndkBuild, 'NDK_DEBUG=1', '-C', file('.').absolutePath
-                return
             }
         }
         else logger.info('local.properties does not exist')
 
-        if (System.env.ANDROID_NDK_HOME != null)
-        {
+        if (System.env.ANDROID_NDK_HOME != null) {
+            ndkBuild = new File(System.env.ANDROID_NDK_HOME, 'ndk-build')
+        } else if (System.env.ANDROID_NDK_PATH != null) {
+            ndkBuild = new File(System.env.ANDROID_NDK_PATH, 'ndk-build')
+        }
+
+        if (ndkBuild != null) {
             logger.info('System.env.ANDROID_NDK_HOME is set')
             hasNdk = true;
-            ndkBuild = new File(System.env.ANDROID_NDK_HOME, 'ndk-build')
             commandLine ndkBuild, '-C', file('.').absolutePath
             //commandLine ndkBuild, 'NDK_DEBUG=1', '-C', file('.').absolutePath
         }
