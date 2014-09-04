@@ -40,6 +40,10 @@ public class ResultIterator extends PageIterator {
         mNativeResultIterator = nativeResultIterator;
     }
 
+    public int GetNativeResultIterator() {
+        return mNativeResultIterator;
+    }
+
     /**
      * Returns the text string for the current object at the given level.
      *

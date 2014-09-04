@@ -7,6 +7,18 @@ LOCAL_MODULE := libtess
 # Android NDK Profiler
 MY_ANDROID_NDK_PROFILER_ENABLED := false
 
+
+CV_DETECT_CARD_DIR :=../../../../CvDetectCard
+LOCAL_SRC_FILES += \
+    tessutil.cpp \
+    $(CV_DETECT_CARD_DIR)/OcrBatchTest/EmailStat.cpp \
+    $(CV_DETECT_CARD_DIR)/OcrBatchTest/tessmain.cpp \
+    $(CV_DETECT_CARD_DIR)/CvDetectCard/src/guitools.cpp
+LOCAL_C_INCLUDES += \
+    $(LOCAL_PATH)/$(CV_DETECT_CARD_DIR)/CvDetectCard/src \
+    $(LOCAL_PATH)/$(CV_DETECT_CARD_DIR)/OcrBatchTest
+LOCAL_CFLAGS += \
+    -DNO_USE_OPENCV
 # tesseract (minus executable)
 
 BLACKLIST_SRC_FILES := \
@@ -29,10 +41,10 @@ TESSERACT_SRC_FILES := \
   $(wildcard $(TESSERACT_PATH)/viewer/*.cpp) \
   $(wildcard $(TESSERACT_PATH)/wordrec/*.cpp)
 
-LOCAL_SRC_FILES := \
+LOCAL_SRC_FILES += \
   $(filter-out $(BLACKLIST_SRC_FILES),$(subst $(LOCAL_PATH)/,,$(TESSERACT_SRC_FILES)))
 
-LOCAL_C_INCLUDES := \
+LOCAL_C_INCLUDES += \
   $(TESSERACT_PATH)/api \
   $(TESSERACT_PATH)/ccmain \
   $(TESSERACT_PATH)/ccstruct \
@@ -48,7 +60,7 @@ LOCAL_C_INCLUDES := \
   $(TESSERACT_PATH)/wordrec \
   $(LEPTONICA_PATH)/src
 
-LOCAL_CFLAGS := \
+LOCAL_CFLAGS += \
   -DHAVE_LIBLEPT \
   -DGRAPHICS_DISABLED \
   --std=c++11 \
@@ -61,12 +73,12 @@ LOCAL_CFLAGS := \
   -D_GLIBCXX_PERMIT_BACKWARD_HASH   # fix for android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.6/include/ext/hash_map:61:30: fatal error: backward_warning.h: No such file or directory
 
 
-ifeq ($(MY_ANDROID_NDK_PROFILER_ENABLED),true) 
+ifeq ($(MY_ANDROID_NDK_PROFILER_ENABLED),true)
 	# Show message
 	# $(info GNU Profiler is enabled)
 	# Enable the monitor functions
 	LOCAL_CFLAGS += -DMY_ANDROID_NDK_PROFILER_ENABLED
-	LOCAL_CFLAGS += -pg 
+	LOCAL_CFLAGS += -pg
 	# Use Android NDK Profiler static library
 	LOCAL_STATIC_LIBRARIES := android-ndk-profiler
 endif
