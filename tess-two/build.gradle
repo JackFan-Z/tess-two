@@ -48,26 +48,25 @@ android {
         def ndkBuild;
         def ndkBuildingDir = new File("./")
         def hasNdk = false;
-        logger.info('Project Path: ' +projectDir)
-        logger.info('JNI Path: ' +ndkBuildingDir)
+        logger.info('Project Path: ' + projectDir)
+        logger.info('JNI Path: ' + ndkBuildingDir)
 
         def lpfile = file('local.properties');
-        if (lpfile.exists())
-        {
+        if (lpfile.exists()) {
             def Properties localProps = new Properties()
             localProps.load(new FileInputStream(lpfile))
-            if (localProps['ndk.dir'] !=null)
-            {
+            if (localProps['ndk.dir'] != null) {
                 logger.info('Taking ndk.dir')
                 ndkBuild = new File(localProps['ndk.dir'], 'ndk-build')
             }
-        }
-        else logger.info('local.properties does not exist')
+        } else logger.info('local.properties does not exist')
 
-        if (System.env.ANDROID_NDK_HOME != null) {
-            ndkBuild = new File(System.env.ANDROID_NDK_HOME, 'ndk-build')
-        } else if (System.env.ANDROID_NDK_PATH != null) {
-            ndkBuild = new File(System.env.ANDROID_NDK_PATH, 'ndk-build')
+        if (ndkBuild == null) {
+            if (System.env.ANDROID_NDK_HOME != null) {
+                ndkBuild = new File(System.env.ANDROID_NDK_HOME, 'ndk-build')
+            } else if (System.env.ANDROID_NDK_PATH != null) {
+                ndkBuild = new File(System.env.ANDROID_NDK_PATH, 'ndk-build')
+            }
         }
 
         if (ndkBuild != null) {
