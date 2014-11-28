@@ -23,7 +23,7 @@ extern "C" {
 
 
 jobjectArray Java_com_invisibi_tess_Util_nativeGetEmailCandidates(JNIEnv *env, jclass clazz,
-    jint nativeResultIterator) {
+    jlong nativeResultIterator) {
 
     ResultIterator *resultIterator = (ResultIterator *) nativeResultIterator;
 

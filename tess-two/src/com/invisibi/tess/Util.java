@@ -11,5 +11,5 @@ public class Util {
         return nativeGetEmailCandidates(resultIterator.GetNativeResultIterator());
     }
 
-    private native static String [] nativeGetEmailCandidates(int mNativeResultIterator);
+    private native static String [] nativeGetEmailCandidates(long mNativeResultIterator);
 }

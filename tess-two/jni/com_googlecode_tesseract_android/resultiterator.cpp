@@ -48,16 +48,8 @@ jfloat Java_com_googlecode_tesseract_android_ResultIterator_nativeConfidence(JNI
   return (jfloat) resultIterator->Confidence(enumLevel);
 }
 
-jboolean Java_com_googlecode_tesseract_android_ResultIterator_nativeNext(JNIEnv *env, jclass clazz,
-    jint nativeResultIterator, jint level) {
-  ResultIterator *resultIterator = (ResultIterator *) nativeResultIterator;
-  PageIteratorLevel enumLevel = (PageIteratorLevel) level;
-
-  return resultIterator->Next(enumLevel) ? JNI_TRUE : JNI_FALSE;
-}
-
 void Java_com_googlecode_tesseract_android_ResultIterator_nativeDelete(JNIEnv *env, jclass clazz,
-    jint nativeResultIterator) {
+    jlong nativeResultIterator) {
   ResultIterator *resultIterator = (ResultIterator *) nativeResultIterator;
   if (resultIterator != 0) {
     delete resultIterator;
