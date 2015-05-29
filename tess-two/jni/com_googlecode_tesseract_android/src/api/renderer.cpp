@@ -106,13 +106,20 @@ TessTextRenderer::TessTextRenderer(const char *outputbase)
 }
 
 bool TessTextRenderer::AddImageHandler(TessBaseAPI* api) {
-  char* utf8 = api->GetUTF8Text();
+  char* utf8 = api->GetUTF8Text(NULL);
   if (utf8 == NULL) {
     return false;
   }
 
   AppendString(utf8);
   delete[] utf8;
+
+  bool pageBreak = false;
+  api->GetBoolVariable("include_page_breaks", &pageBreak);
+  const char* pageSeparator = api->GetStringVariable("page_separator");
+  if (pageBreak) {
+    AppendString(pageSeparator);
+  }
 
   return true;
 }
@@ -122,6 +129,12 @@ bool TessTextRenderer::AddImageHandler(TessBaseAPI* api) {
  **********************************************************************/
 TessHOcrRenderer::TessHOcrRenderer(const char *outputbase)
     : TessResultRenderer(outputbase, "hocr") {
+    font_info_ = false;
+}
+
+TessHOcrRenderer::TessHOcrRenderer(const char *outputbase, bool font_info)
+    : TessResultRenderer(outputbase, "hocr") {
+    font_info_ = font_info;
 }
 
 bool TessHOcrRenderer::BeginDocumentHandler() {
@@ -139,7 +152,12 @@ bool TessHOcrRenderer::BeginDocumentHandler() {
       "  <meta name='ocr-system' content='tesseract " TESSERACT_VERSION_STR
               "' />\n"
       "  <meta name='ocr-capabilities' content='ocr_page ocr_carea ocr_par"
-      " ocr_line ocrx_word'/>\n"
+      " ocr_line ocrx_word");
+  if (font_info_)
+    AppendString(
+      " ocrp_lang ocrp_dir ocrp_font ocrp_fsize ocrp_wconf");
+  AppendString(
+      "'/>\n"
       "</head>\n<body>\n");
 
   return true;
@@ -152,7 +170,7 @@ bool TessHOcrRenderer::EndDocumentHandler() {
 }
 
 bool TessHOcrRenderer::AddImageHandler(TessBaseAPI* api) {
-  char* hocr = api->GetHOCRText(imagenum());
+  char* hocr = api->GetHOCRText(imagenum(), NULL);
   if (hocr == NULL) return false;
 
   AppendString(hocr);

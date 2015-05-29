@@ -28,7 +28,7 @@ extern "C" {
  *************/
 
 jint Java_com_googlecode_leptonica_android_WriteFile_nativeWriteBytes8(JNIEnv *env, jclass clazz,
-                                                                       jint nativePix,
+                                                                       jlong nativePix,
                                                                        jbyteArray data) {
   l_int32 w, h, d;
   PIX *pix = (PIX *) nativePix;
@@ -48,58 +48,9 @@ jint Java_com_googlecode_leptonica_android_WriteFile_nativeWriteBytes8(JNIEnv *e
   return (jint)(w * h);
 }
 
-jboolean Java_com_googlecode_leptonica_android_WriteFile_nativeWriteFiles(JNIEnv *env,
-                                                                          jclass clazz,
-                                                                          jint nativePixa,
-                                                                          jstring rootName,
-                                                                          jint format) {
-  PIXA *pixas = (PIXA *) nativePixa;
-
-  const char *c_rootName = env->GetStringUTFChars(rootName, NULL);
-  if (c_rootName == NULL) {
-    LOGE("could not extract rootName string!");
-    return JNI_FALSE;
-  }
-
-  jboolean result = JNI_TRUE;
-
-  if (pixaWriteFiles(c_rootName, pixas, (l_uint32) format)) {
-    LOGE("could not write pixa data to %s", c_rootName);
-    result = JNI_FALSE;
-  }
-
-  env->ReleaseStringUTFChars(rootName, c_rootName);
-
-  return result;
-}
-
-jbyteArray Java_com_googlecode_leptonica_android_WriteFile_nativeWriteMem(JNIEnv *env,
-                                                                          jclass clazz,
-                                                                          jint nativePix,
-                                                                          jint format) {
-  PIX *pixs = (PIX *) nativePix;
-
-  l_uint8 *data;
-  size_t size;
-
-  if (pixWriteMem(&data, &size, pixs, (l_uint32) format)) {
-    LOGE("Failed to write pix data");
-    return NULL;
-  }
-
-  // TODO Can we just use the byte array directly?
-  jbyteArray array = env->NewByteArray(size);
-  env->SetByteArrayRegion(array, 0, size, (jbyte *) data);
-
-  free(data);
-
-  return array;
-}
-
-jboolean Java_com_googlecode_leptonica_android_WriteFile_nativeWriteImpliedFormat(
-                                                                                  JNIEnv *env,
+jboolean Java_com_googlecode_leptonica_android_WriteFile_nativeWriteImpliedFormat(JNIEnv *env,
                                                                                   jclass clazz,
-                                                                                  jint nativePix,
+                                                                                  jlong nativePix,
                                                                                   jstring fileName,
                                                                                   jint quality,
                                                                                   jboolean progressive) {
@@ -125,7 +76,7 @@ jboolean Java_com_googlecode_leptonica_android_WriteFile_nativeWriteImpliedForma
 
 jboolean Java_com_googlecode_leptonica_android_WriteFile_nativeWriteBitmap(JNIEnv *env,
                                                                            jclass clazz,
-                                                                           jint nativePix,
+                                                                           jlong nativePix,
                                                                            jobject bitmap) {
   PIX *pixs = (PIX *) nativePix;
 

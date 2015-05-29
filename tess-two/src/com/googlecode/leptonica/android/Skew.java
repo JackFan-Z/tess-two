@@ -75,7 +75,7 @@ public class Skew {
      * @param sweepDelta Angle increment of sweep; in degrees.
      * @param sweepReduction Sweep reduction factor = 1, 2, 4 or 8.
      * @param searchReduction Binary search reduction factor = 1, 2, 4 or 8; and
-     *            must not exceed redsweep.
+     *            must not exceed sweepReduction.
      * @param searchMinDelta Minimum binary search increment angle; in degrees.
      * @return the detected skew angle, or 0.0 on failure
      */
@@ -92,7 +92,7 @@ public class Skew {
     // * NATIVE CODE *
     // ***************
 
-    private static native float nativeFindSkew(int nativePix, float sweepRange, float sweepDelta,
+    private static native float nativeFindSkew(long nativePix, float sweepRange, float sweepDelta,
             int sweepReduction, int searchReduction, float searchMinDelta);
 
 }

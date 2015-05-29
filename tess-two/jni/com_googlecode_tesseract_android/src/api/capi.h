@@ -53,6 +53,7 @@ typedef tesseract::Dawg TessDawg;
 typedef tesseract::TruthCallback TessTruthCallback;
 typedef tesseract::CubeRecoContext TessCubeRecoContext;
 typedef tesseract::Orientation TessOrientation;
+typedef tesseract::ParagraphJustification TessParagraphJustification;
 typedef tesseract::WritingDirection TessWritingDirection;
 typedef tesseract::TextlineOrder TessTextlineOrder;
 typedef PolyBlockType TessPolyBlockType;
@@ -77,6 +78,7 @@ typedef enum TessPolyBlockType     { PT_UNKNOWN, PT_FLOWING_TEXT, PT_HEADING_TEX
                                      PT_TABLE, PT_VERTICAL_TEXT, PT_CAPTION_TEXT, PT_FLOWING_IMAGE, PT_HEADING_IMAGE,
                                      PT_PULLOUT_IMAGE, PT_HORZ_LINE, PT_VERT_LINE, PT_NOISE, PT_COUNT } TessPolyBlockType;
 typedef enum TessOrientation       { ORIENTATION_PAGE_UP, ORIENTATION_PAGE_RIGHT, ORIENTATION_PAGE_DOWN, ORIENTATION_PAGE_LEFT } TessOrientation;
+typedef enum TessParagraphJustification { JUSTIFICATION_UNKNOWN, JUSTIFICATION_LEFT, JUSTIFICATION_CENTER, JUSTIFICATION_RIGHT } TessParagraphJustification;
 typedef enum TessWritingDirection  { WRITING_DIRECTION_LEFT_TO_RIGHT, WRITING_DIRECTION_RIGHT_TO_LEFT, WRITING_DIRECTION_TOP_TO_BOTTOM } TessWritingDirection;
 typedef enum TessTextlineOrder     { TEXTLINE_ORDER_LEFT_TO_RIGHT, TEXTLINE_ORDER_RIGHT_TO_LEFT, TEXTLINE_ORDER_TOP_TO_BOTTOM } TessTextlineOrder;
 typedef struct ETEXT_DESC ETEXT_DESC;
@@ -100,6 +102,7 @@ TESS_API void  TESS_CALL TessDeleteBlockList(BLOCK_LIST* block_list);
 /* Renderer API */
 TESS_API TessResultRenderer* TESS_CALL TessTextRendererCreate(const char* outputbase);
 TESS_API TessResultRenderer* TESS_CALL TessHOcrRendererCreate(const char* outputbase);
+TESS_API TessResultRenderer* TESS_CALL TessHOcrRendererCreate2(const char* outputbase, BOOL font_info);
 TESS_API TessResultRenderer* TESS_CALL TessPDFRendererCreate(const char* outputbase, const char* datadir);
 TESS_API TessResultRenderer* TESS_CALL TessUnlvRendererCreate(const char* outputbase);
 TESS_API TessResultRenderer* TESS_CALL TessBoxTextRendererCreate(const char* outputbase);
@@ -161,7 +164,7 @@ TESS_API int   TESS_CALL TessBaseAPIInit1(TessBaseAPI* handle, const char* datap
 TESS_API int   TESS_CALL TessBaseAPIInit2(TessBaseAPI* handle, const char* datapath, const char* language, TessOcrEngineMode oem);
 TESS_API int   TESS_CALL TessBaseAPIInit3(TessBaseAPI* handle, const char* datapath, const char* language);
 
-TESS_API int TESS_CALL TessBaseAPIInit4(TessBaseAPI* handle, const char* datapath, const char* language, TessOcrEngineMode mode, 
+TESS_API int TESS_CALL TessBaseAPIInit4(TessBaseAPI* handle, const char* datapath, const char* language, TessOcrEngineMode mode,
     char** configs, int configs_size,
     char** vars_vec, char** vars_values, size_t vars_vec_size,
     BOOL set_only_non_debug_params);
@@ -298,7 +301,7 @@ TESS_API TessCubeRecoContext*
 
 TESS_API void  TESS_CALL TessBaseAPISetMinOrientationMargin(TessBaseAPI* handle, double margin);
 #ifdef TESS_CAPI_INCLUDE_BASEAPI
-TESS_API void  TESS_CALL TessBaseGetBlockTextOrientations(TessBaseAPI* handle, int** block_orientation, bool** vertical_writing);
+TESS_API void  TESS_CALL TessBaseGetBlockTextOrientations(TessBaseAPI* handle, int** block_orientation, BOOL** vertical_writing);
 
 TESS_API BLOCK_LIST*
                TESS_CALL TessBaseAPIFindLinesCreateBlockList(TessBaseAPI* handle);
@@ -334,6 +337,9 @@ TESS_API void  TESS_CALL TessPageIteratorOrientation(TessPageIterator* handle, T
                                                      TessWritingDirection* writing_direction, TessTextlineOrder* textline_order,
                                                      float* deskew_angle);
 
+TESS_API void  TESS_CALL TessPageIteratorParagraphInfo(TessPageIterator* handle, TessParagraphJustification* justification,
+                                                       BOOL *is_list_item, BOOL *is_crown, int *first_line_indent);
+
 /* Result iterator */
 
 TESS_API void  TESS_CALL TessResultIteratorDelete(TessResultIterator* handle);
@@ -343,7 +349,7 @@ TESS_API TessPageIterator*
                TESS_CALL TessResultIteratorGetPageIterator(TessResultIterator* handle);
 TESS_API const TessPageIterator*
                TESS_CALL TessResultIteratorGetPageIteratorConst(const TessResultIterator* handle);
-TESS_API const TessChoiceIterator*
+TESS_API TessChoiceIterator*
                TESS_CALL TessResultIteratorGetChoiceIterator(const TessResultIterator* handle);
 
 TESS_API BOOL  TESS_CALL TessResultIteratorNext(TessResultIterator* handle, TessPageIteratorLevel level);
