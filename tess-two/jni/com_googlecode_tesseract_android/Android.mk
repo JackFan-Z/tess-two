@@ -8,7 +8,7 @@ LOCAL_MODULE := libtess
 MY_ANDROID_NDK_PROFILER_ENABLED := false
 
 
-CV_DETECT_CARD_DIR :=../../../../CvDetectCard
+CV_DETECT_CARD_DIR :=../../../../ZappointPlus/subm_CvDetectCard
 LOCAL_SRC_FILES += \
     tessutil.cpp \
     $(CV_DETECT_CARD_DIR)/OcrBatchTest/EmailStat.cpp \

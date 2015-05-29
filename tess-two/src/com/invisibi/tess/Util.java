@@ -12,4 +12,11 @@ public class Util {
     }
 
     private native static String [] nativeGetEmailCandidates(long mNativeResultIterator);
+
+    public static String [] GetFullnameCandidates(ResultIterator resultIterator) {
+        return nativeGetFullnameCandidates(resultIterator.GetNativeResultIterator());
+    }
+
+    private native static String [] nativeGetFullnameCandidates(long mNativeResultIterator);
+
 }
