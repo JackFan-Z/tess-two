@@ -25,6 +25,8 @@ LOCAL_LDLIBS := \
 
 # jni
 
+ifeq ($(TESS_INSTALL_MODULES),on)
+else
 LOCAL_SRC_FILES += \
   box.cpp \
   pix.cpp \
@@ -34,6 +36,7 @@ LOCAL_SRC_FILES += \
   writefile.cpp \
   jni.cpp
   
+endif
 LOCAL_C_INCLUDES += \
   $(LOCAL_PATH) \
   $(LEPTONICA_PATH)/src
@@ -46,4 +49,10 @@ LOCAL_LDLIBS += \
 
 LOCAL_PRELINK_MODULE:= false
 
-include $(BUILD_SHARED_LIBRARY)
+ifeq ($(TESS_INSTALL_MODULES),on)
+  LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
+  LOCAL_SRC_FILES := ../../libs/$(TARGET_ARCH_ABI)/$(LOCAL_MODULE).so
+  include $(PREBUILT_SHARED_LIBRARY)
+else
+  include $(BUILD_SHARED_LIBRARY)
+endif

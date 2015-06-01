@@ -26,8 +26,11 @@ TESSERACT_SRC_FILES := \
   $(wildcard $(TESSERACT_PATH)/viewer/*.cpp) \
   $(wildcard $(TESSERACT_PATH)/wordrec/*.cpp)
 
+ifeq ($(TESS_INSTALL_MODULES),on)
+else
 LOCAL_SRC_FILES := \
   $(filter-out $(BLACKLIST_SRC_FILES),$(subst $(LOCAL_PATH)/,,$(TESSERACT_SRC_FILES)))
+endif
 
 LOCAL_C_INCLUDES := \
   $(TESSERACT_PATH)/api \
@@ -59,11 +62,14 @@ LOCAL_CFLAGS := \
 
 # jni
 
+ifeq ($(TESS_INSTALL_MODULES),on)
+else
 LOCAL_SRC_FILES += \
   pageiterator.cpp \
   resultiterator.cpp \
   tessbaseapi.cpp
 
+endif
 LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)
 
@@ -77,4 +83,10 @@ LOCAL_PRELINK_MODULE := false
 LOCAL_SHARED_LIBRARIES := liblept
 LOCAL_DISABLE_FORMAT_STRING_CHECKS := true
 
-include $(BUILD_SHARED_LIBRARY)
+ifeq ($(TESS_INSTALL_MODULES),on)
+  LOCAL_EXPORT_C_INCLUDES += $(LOCAL_C_INCLUDES)
+  LOCAL_SRC_FILES := ../../libs/$(TARGET_ARCH_ABI)/$(LOCAL_MODULE).so
+  include $(PREBUILT_SHARED_LIBRARY)
+else
+  include $(BUILD_SHARED_LIBRARY)
+endif
