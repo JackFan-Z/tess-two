@@ -362,6 +362,14 @@ public class TessBaseAPI {
         return success;
     }
 
+    public long getNativeData() {
+        return mNativeData;
+    }
+
+    public void setNativeData(long mNativeData) {
+        this.mNativeData = mNativeData;
+    }
+
     /**
      * Returns the languages string used in the last valid initialization.
      * If the last initialization specified "deu+hin" then that will be
