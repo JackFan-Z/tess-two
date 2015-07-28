@@ -72,7 +72,6 @@
 #include "tessbox.h"
 #include "makerow.h"
 #include "otsuthr.h"
-#include "osdetect.h"
 #include "params.h"
 #include "renderer.h"
 #include "strngs.h"
@@ -2097,7 +2096,7 @@ int TessBaseAPI::FindLines() {
   }
 
   Tesseract* osd_tess = osd_tesseract_;
-  OSResults osr;
+  osr_.reset();
   if (PSM_OSD_ENABLED(tesseract_->tessedit_pageseg_mode) && osd_tess == NULL) {
     if (strcmp(language_->string(), "osd") == 0) {
       osd_tess = tesseract_;
@@ -2118,11 +2117,11 @@ int TessBaseAPI::FindLines() {
     }
   }
 
-  if (tesseract_->SegmentPage(input_file_, block_list_, osd_tess, &osr) < 0)
+  if (tesseract_->SegmentPage(input_file_, block_list_, osd_tess, &osr_) < 0)
     return -1;
   // If Devanagari is being recognized, we use different images for page seg
   // and for OCR.
-  tesseract_->PrepareForTessOCR(block_list_, osd_tess, &osr);
+  tesseract_->PrepareForTessOCR(block_list_, osd_tess, &osr_);
   return 0;
 }
 

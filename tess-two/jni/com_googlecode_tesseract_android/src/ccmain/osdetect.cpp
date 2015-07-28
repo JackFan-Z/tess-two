@@ -64,6 +64,13 @@ const int kMinCredibleResolution = 70;
 // Default resolution used if input is not believable.
 const int kDefaultResolution = 300;
 
+void OSResults::reset() {
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < kMaxNumberOfScripts; ++j)
+            scripts_na[i][j] = 0;
+        orientations[i] = 0;
+    }
+}
 void OSResults::update_best_orientation() {
   float first = orientations[0];
   float second = orientations[1];

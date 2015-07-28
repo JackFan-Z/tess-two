@@ -52,6 +52,7 @@ struct OSResults {
       orientations[i] = 0;
     }
   }
+  void reset();
   void update_best_orientation();
   // Set the estimate of the orientation to the given id.
   void set_best_orientation(int orientation_id);
