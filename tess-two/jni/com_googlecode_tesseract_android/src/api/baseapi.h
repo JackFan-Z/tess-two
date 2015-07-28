@@ -37,6 +37,7 @@
 #include "publictypes.h"
 #include "pageiterator.h"
 #include "resultiterator.h"
+#include "osdetect.h"
 
 template <typename T> class GenericVector;
 class PAGE_RES;
@@ -740,6 +741,9 @@ class TESS_API TessBaseAPI {
 
   void set_min_orientation_margin(double margin);
 
+  OSResults* GetOSResults() {
+    return &osr_;
+  }
   /**
    * Return text orientation of each block as determined by an earlier run
    * of layout analysis.
@@ -835,6 +839,7 @@ class TESS_API TessBaseAPI {
 
 
  protected:
+  OSResults         osr_;             ///< JackTest OSD result
   Tesseract*        tesseract_;       ///< The underlying data object.
   Tesseract*        osd_tesseract_;   ///< For orientation & script detection.
   EquationDetect*   equ_detect_;      ///<The equation detector.
