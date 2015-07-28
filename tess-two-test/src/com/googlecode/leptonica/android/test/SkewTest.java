@@ -25,6 +25,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.googlecode.leptonica.android.Convert;
 import com.googlecode.leptonica.android.GrayQuant;
 import com.googlecode.leptonica.android.Pix;
 import com.googlecode.leptonica.android.ReadFile;
@@ -41,7 +42,7 @@ public class SkewTest extends TestCase {
         testFindSkew(SENTENCE, 640, 480, 15.0f);
     }
 
-    private void testFindSkew(String text, int width, int height, float requestedSkew) {
+    private void testFindSkew(String text, int width, int height, float skew) {
         Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Paint paint = new Paint();
         Canvas canvas = new Canvas(bmp);
@@ -53,14 +54,27 @@ public class SkewTest extends TestCase {
         paint.setTextSize(32.0f);
 
         canvas.drawColor(Color.WHITE);
-        canvas.rotate(requestedSkew, width / 2, height / 2);
+        canvas.rotate(skew, width / 2, height / 2);
         canvas.drawText(SENTENCE, width / 2, height / 2 , paint);
 
         Pix pixs = ReadFile.readBitmap(bmp);
-        Pix pixd = GrayQuant.pixThresholdToBinary(pixs, 1);
-        float measuredSkew = -Skew.findSkew(pixd);
 
-        boolean isInRange = requestedSkew - 1 < measuredSkew && measuredSkew < requestedSkew + 1;
+        Pix pixd;
+        if (pixs.getDepth() != 4 || pixs.getDepth() != 8) {
+            Pix pix8 = Convert.convertTo8(pixs);
+            pixd = GrayQuant.pixThresholdToBinary(pix8, 1);
+            pix8.recycle();
+        } else {
+            pixd = GrayQuant.pixThresholdToBinary(pixs, 1);
+        }
+
+        float measuredSkew = -Skew.findSkew(pixd);
+        float tol = 1f;
+        boolean isInRange = skew - tol < measuredSkew && measuredSkew < skew + tol;
         assertTrue("Skew has incorrect value.", isInRange);
+
+        pixs.recycle();
+        pixd.recycle();
+        bmp.recycle();
     }
 }

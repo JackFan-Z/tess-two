@@ -29,6 +29,10 @@ public class MorphApp {
     public static final int L_TOPHAT_WHITE = 0;
     public static final int L_TOPHAT_BLACK = 1;
 
+    public static final int DEFAULT_WIDTH = 7;
+
+    public static final int DEFAULT_HEIGHT = 7;
+
     /**
      * Performs a tophat transform.
      * <p>
@@ -58,12 +62,39 @@ public class MorphApp {
         if (type < 0 || type > 1)
             throw new IllegalArgumentException("Type must be L_TOPHAT_BLACK or L_TOPHAT_WHITE");
 
-        long nativePix = nativePixTophat(pixs.mNativePix, hsize, vsize, type);
+        long nativePix = nativePixTophat(pixs.getNativePix(), hsize, vsize, 
+                type);
 
         if (nativePix == 0)
             throw new RuntimeException("Failed to perform Tophat on image");
 
         return new Pix(nativePix); 
+    }
+
+    /**
+     * Performs a tophat-like operation emphasizing small dark regions using
+     * default values.
+     * 
+     * @see #pixFastTophat(Pix, int, int, int)
+     * 
+     * @param pixs Source pix (8bpp)
+     * @return a new Pix image
+     */
+    public static Pix pixFastTophatBlack(Pix pixs) {
+        return pixFastTophat(pixs, DEFAULT_WIDTH, DEFAULT_HEIGHT, L_TOPHAT_BLACK);
+    }
+
+    /**
+     * Performs a tophat-like operation emphasizing small bright regions using
+     * default values.
+     * 
+     * @see #pixFastTophat(Pix, int, int, int)
+     * 
+     * @param pixs Source pix (8bpp)
+     * @return a new Pix image
+     */
+    public static Pix pixFastTophatWhite(Pix pixs) {
+        return pixFastTophat(pixs, DEFAULT_WIDTH, DEFAULT_HEIGHT, L_TOPHAT_WHITE);
     }
 
     /**
@@ -103,7 +134,8 @@ public class MorphApp {
         if (type < 0 || type > 1)
             throw new IllegalArgumentException("Type must be L_TOPHAT_BLACK or L_TOPHAT_WHITE");
 
-        long nativePix = nativePixFastTophat(pixs.mNativePix, xsize, ysize, type);
+        long nativePix = nativePixFastTophat(pixs.getNativePix(), xsize, ysize, 
+                type);
 
         if (nativePix == 0)
             throw new RuntimeException("Failed to perform pixFastTophat on image");

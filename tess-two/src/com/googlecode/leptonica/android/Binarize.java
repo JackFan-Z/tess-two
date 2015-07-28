@@ -43,6 +43,17 @@ public class Binarize {
     /** Fraction of the max Otsu score, typically 0.1 */
     public final static float OTSU_SCORE_FRACTION = 0.1f;
 
+    // Sauvola thresholding constants
+
+    public final static int SAUVOLA_DEFAULT_WINDOW_HALFWIDTH = 8;
+
+    public final static float SAUVOLA_DEFAULT_REDUCTION_FACTOR = 0.35f;
+
+    public final static int SAUVOLA_DEFAULT_NUM_TILES_X = 1;
+
+    public final static int SAUVOLA_DEFAULT_NUM_TILES_Y = 1;
+
+
     /**
      * Performs locally-adaptive Otsu threshold binarization with default
      * parameters.
@@ -111,13 +122,27 @@ public class Binarize {
         if (pixs.getDepth() != 8)
             throw new IllegalArgumentException("Source pix depth must be 8bpp");
 
-        long nativePix = nativeOtsuAdaptiveThreshold(
-                pixs.mNativePix, sizeX, sizeY, smoothX, smoothY, scoreFraction);
+        long nativePix = nativeOtsuAdaptiveThreshold(pixs.getNativePix(), 
+                sizeX, sizeY, smoothX, smoothY, scoreFraction);
 
         if (nativePix == 0)
             throw new RuntimeException("Failed to perform Otsu adaptive threshold on image");
 
         return new Pix(nativePix);
+    }
+
+    /**
+     * Performs Sauvola binarization using default values.
+     * 
+     * @see #sauvolaBinarizeTiled(Pix, int, float, int, int)
+     * 
+     * @param pixs An 8 bpp PIX source image.
+     * @return A 1 bpp thresholded PIX image.
+     */
+    public static Pix sauvolaBinarizeTiled(Pix pixs) {
+        return sauvolaBinarizeTiled(pixs, SAUVOLA_DEFAULT_WINDOW_HALFWIDTH, 
+                SAUVOLA_DEFAULT_REDUCTION_FACTOR, SAUVOLA_DEFAULT_NUM_TILES_X, 
+                SAUVOLA_DEFAULT_NUM_TILES_Y);
     }
 
     /**
@@ -162,11 +187,12 @@ public class Binarize {
             throw new IllegalArgumentException("Source pix must be non-null");
         if (pixs.getDepth() != 8)
             throw new IllegalArgumentException("Source pix depth must be 8bpp");
-        
-        long nativePix = nativeSauvolaBinarizeTiled(pixs.mNativePix, whsize, factor, nx, ny);
-        
+
+        long nativePix = nativeSauvolaBinarizeTiled(pixs.getNativePix(), 
+                whsize, factor, nx, ny);
+
         if (nativePix == 0)
-            throw new RuntimeException("Failed to perform Otsu adaptive threshold on image");
+            throw new RuntimeException("Failed to perform Sauvola binarization on image");
 
         return new Pix(nativePix);        
     }
