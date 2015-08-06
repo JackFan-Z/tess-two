@@ -70,6 +70,7 @@ BOOL_VAR(textord_tabfind_show_reject_blobs,
 INT_VAR(textord_tabfind_show_partitions, 0,
         "Show partition bounds, waiting if >1");
 BOOL_VAR(textord_tabfind_show_columns, false, "Show column bounds");
+BOOL_VAR(textord_tabfind_merge_blocks, true, "Try to merge blocks"); //JackTest
 BOOL_VAR(textord_tabfind_show_blocks, false, "Show final block bounds");
 BOOL_VAR(textord_tabfind_find_tables, true, "run table detection");
 
@@ -398,10 +399,12 @@ int ColumnFinder::FindBlocks(PageSegMode pageseg_mode, Pix* scaled_color,
     part_grid_.GridFindMargins(best_columns_);
     // Split and merge the partitions by looking at local neighbours.
     GridSplitPartitions();
-    // Resolve unknown partitions by adding to an existing partition, fixing
-    // the type, or declaring them noise.
-    part_grid_.GridFindMargins(best_columns_);
-    GridMergePartitions();
+    if (textord_tabfind_merge_blocks) {
+      // Resolve unknown partitions by adding to an existing partition, fixing
+      // the type, or declaring them noise.
+      part_grid_.GridFindMargins(best_columns_);
+      GridMergePartitions();
+    }
     // Insert any unused noise blobs that are close enough to an appropriate
     // partition.
     InsertRemainingNoise(input_block);
