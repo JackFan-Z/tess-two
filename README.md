@@ -6,7 +6,7 @@ additional functions. Tesseract Tools for Android is a set of Android APIs and
 build files for the [Tesseract OCR][tesseract-ocr] and [Leptonica][leptonica] 
 image processing libraries.
 
-This project works with Tesseract pre-release v3.04 and Leptonica v1.72. The 
+This project works with Tesseract v3.04.00 and Leptonica v1.72. The 
 required source code for Tesseract and Leptonica is included within the 
 `tess-two/jni` folder.
 
@@ -38,8 +38,7 @@ incompatible with previous versions.
 ## Building
 
 This project is set up to build on Android SDK Tools r22.3+ and Android NDK 
-r10d+. The build works on Linux, Mac OS X, and Windows 7/8. See [Issues][issues]
-for reported build issues.
+r10d+. The build works on Linux, Mac OS X, and Windows 7/8.
 
 On 64-bit Ubuntu, you may need to install the `ia32-libs` 32-bit compatibility 
 library.
@@ -72,8 +71,8 @@ registered in a Maven central repository), it can be
 
 ## ProGuard
 If you're using ProGuard for code shrinking and obfuscation, add the following
-to your app's ProGuard config to retain fields used for sharing data with native
-code:
+rules to your app's ProGuard config to retain fields used for sharing data with 
+native code:
 ```proguard
 # tess-two
 -keep class com.googlecode.leptonica.android.Box {
@@ -94,6 +93,9 @@ code:
 -keep class com.googlecode.tesseract.android.PageIterator {
     private long mNativePageIterator;
 }
+-keep class com.googlecode.tesseract.android.TessPdfRenderer {
+    private long mNativePdfRenderer;
+}
 -keep class com.googlecode.tesseract.android.ResultIterator {
     private long mNativeResultIterator;
 }
@@ -108,7 +110,7 @@ code:
 
 ## Support
 
-* Stack Overflow: http://stackoverflow.com/questions/tagged/tess-two
+* Stack Overflow: https://stackoverflow.com/questions/tagged/tess-two
 * tesseract-ocr: https://groups.google.com/forum/#!forum/tesseract-ocr
 
 If you've found an error in this project, please file an issue.
@@ -140,6 +142,5 @@ submitting a pull request through GitHub.
 [eyes-free]: https://code.google.com/p/eyes-free/
 [tessdata]: https://github.com/tesseract-ocr/tessdata
 [semantic-versioning]: http://semver.org
-[issues]: https://github.com/rmtheis/tess-two/issues
 [maven]: http://www.jameselsey.co.uk/blogs/techblog/tesseract-ocr-on-android-is-easier-if-you-maven-ise-it-works-on-windows-too/
 [stackoverflow]: https://stackoverflow.com/
