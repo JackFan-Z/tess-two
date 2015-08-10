@@ -37,11 +37,19 @@ LOCAL_SRC_FILES := $(common_SRC_FILES)
 LOCAL_CFLAGS += $(common_CFLAGS) -ftrapv
 LOCAL_CFLAGS_arm := $(my_cflags_arm)
 LOCAL_ASFLAGS += $(common_ASFLAGS)
+ifeq ($(TESS_INSTALL_MODULES),on)
+else
 LOCAL_SRC_FILES_arm := $(my_src_files_arm)
 LOCAL_CFLAGS_arm64 := $(my_cflags_arm64)
 LOCAL_SRC_FILES_arm64 := $(my_src_files_arm)
+endif
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
 LOCAL_SHARED_LIBRARIES := libz
 LOCAL_LDLIBS := -lz
 LOCAL_MODULE:= libpng
+ifeq ($(TESS_INSTALL_MODULES),on)
+LOCAL_SRC_FILES := ../../libs/$(TARGET_ARCH_ABI)/$(LOCAL_MODULE).so
+include $(PREBUILT_SHARED_LIBRARY)
+else
 include $(BUILD_SHARED_LIBRARY)
+endif
