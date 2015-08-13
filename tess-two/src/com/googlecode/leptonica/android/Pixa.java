@@ -31,7 +31,7 @@ import java.util.Iterator;
  */
 public class Pixa implements Iterable<Pix> {
     static {
-        System.loadLibrary("png");
+        System.loadLibrary("pngtess");
         System.loadLibrary("lept");
     }
 

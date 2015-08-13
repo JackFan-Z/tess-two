@@ -23,7 +23,7 @@ package com.googlecode.leptonica.android;
  */
 public class AdaptiveMap {
     static {
-        System.loadLibrary("png");
+        System.loadLibrary("pngtess");
         System.loadLibrary("lept");
     }
 

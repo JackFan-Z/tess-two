@@ -18,7 +18,7 @@ package com.googlecode.leptonica.android;
 
 public class GrayQuant {
     static {
-        System.loadLibrary("png");
+        System.loadLibrary("pngtess");
         System.loadLibrary("lept");
     }
 

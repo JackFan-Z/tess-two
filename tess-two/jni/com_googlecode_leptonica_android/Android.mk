@@ -48,7 +48,7 @@ LOCAL_LDLIBS += \
   -llog
 
 # common
-LOCAL_SHARED_LIBRARIES:= libpng
+LOCAL_SHARED_LIBRARIES:= libpngtess
 
 LOCAL_PRELINK_MODULE:= false
 

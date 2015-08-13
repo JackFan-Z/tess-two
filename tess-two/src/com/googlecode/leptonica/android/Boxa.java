@@ -26,7 +26,7 @@ import android.util.Log;
  */
 public class Boxa {
     static {
-        System.loadLibrary("png");
+        System.loadLibrary("pngtess");
         System.loadLibrary("lept");
     }
 
