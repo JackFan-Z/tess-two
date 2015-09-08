@@ -70,6 +70,8 @@ void OSResults::reset() {
             scripts_na[i][j] = 0;
         orientations[i] = 0;
     }
+    set_best_orientation(0);
+    best_result.sconfidence = 0;
 }
 void OSResults::update_best_orientation() {
   float first = orientations[0];
